@@ -11,13 +11,15 @@ export const letters = [
     'y', 'z'
   ];
 
-async function main() {
-    const allWords = await getAllEnglishWords();
+const oneLetterWords = ['a', 'i'];
 
-    letters.forEach((l) => graph.setNode(l));
+async function main() {
+    const allWords = await getAllScrabbleWords();
+
+    oneLetterWords.forEach((l) => graph.setNode(l));
 
     var currentWords: string[] = [];
-    var nextWords: string[] = letters;
+    var nextWords: string[] = oneLetterWords;
     var level = 0;
 
     while (nextWords.length) {
@@ -31,8 +33,9 @@ async function main() {
     currentWords.forEach(printSampleAncestors);
 }
 
-async function getAllEnglishWords() {
-    return (await axios.get<Record<string, number>>('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json')).data;
+async function getAllScrabbleWords() {
+    const arr = (await axios.get<string[]>('https://raw.githubusercontent.com/benjamincrom/scrabble/master/scrabble/dictionary.json')).data;
+    return [...arr, ...oneLetterWords].reduce((acc, val) => {acc[val] = 1; return acc;}, {} as Record<string, 1>)
 }
 
 function getNextWords(currentWords: string[], allWords: Record<string, number>) {
