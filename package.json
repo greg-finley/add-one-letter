@@ -4,7 +4,9 @@
   "description": "Explore longest words that can be created from other valid words, adding one letter at a time",
   "scripts": {
     "add-one-letter": "ts-node src/add-one-letter.ts",
-    "test": "mocha"
+    "test": "npm-run-all test:*",
+    "test:tsc": "tsc -p tsconfig.json --noEmit",
+    "test:unit": "mocha"
   },
   "repository": {
     "type": "git",
@@ -35,6 +37,7 @@
     "@types/mocha": "8.2.2",
     "@types/node": "15.6.1",
     "chai": "4.3.4",
-    "mocha": "8.4.0"
+    "mocha": "8.4.0",
+    "npm-run-all": "4.1.5"
   }
 }
