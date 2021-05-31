@@ -26,7 +26,8 @@ describe('add-one-letter', () => {
 
     describe('filterToValidWords', () => {
         it('filters to valid words', () => {
-            expect(filterToValidWords(['bbb', 'yam', 'turkey'], {'yam': 1, 'turkey': 1, 'gravy': 1})).to.eql(['yam', 'turkey']);
+            expect(filterToValidWords({currentWord: 'something', possibleWords: ['bbb', 'yam', 'turkey']},
+            {'yam': 1, 'turkey': 1, 'gravy': 1})).to.eql(['yam', 'turkey']);
         })
     })
 })

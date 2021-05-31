@@ -1,6 +1,7 @@
 import axios from "axios";
+var Graph = require("@dagrejs/graphlib").Graph;
 
-const buildableWordSets: Set<string>[] = [];
+var graph = new Graph();
 
 export const letters = [
     'a', 'b', 'c', 'd', 'e', 'f',
@@ -13,44 +14,68 @@ export const letters = [
 async function main() {
     const allWords = await getAllEnglishWords();
 
-    var nextWords = new Set(letters);
+    letters.forEach((l) => graph.setNode(l));
 
-    while (nextWords.size) {
-        buildableWordSets.push(nextWords);
-        nextWords = getNextWordSet(nextWords, allWords);
+    var currentWords: string[] = [];
+    var nextWords: string[] = letters;
+    var level = 0;
+
+    while (nextWords.length) {
+        console.log(`Graph level ${level} has ${nextWords.length} distinct words`);
+        level++;
+        currentWords = nextWords.slice();
+        nextWords = getNextWords(nextWords, allWords);
     }
 
-    console.log(buildableWordSets[buildableWordSets.length - 1]);
+    console.log(`The longest words are length ${currentWords[0].length}: ${currentWords}`);
+    currentWords.forEach(printSampleAncestors);
 }
 
 async function getAllEnglishWords() {
     return (await axios.get<Record<string, number>>('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json')).data;
 }
 
-function getNextWordSet(currentSet: Set<string>, allWords: Record<string, number>) {
-    return new Set(filterToValidWords(Array.from(currentSet).map((w) => possibleNextWords(w, letters)).flat(), allWords));
+function getNextWords(currentWords: string[], allWords: Record<string, number>) {
+    return Array.from(new Set(currentWords.map((w) => filterToValidWords(possibleNextWords(w, letters), allWords)).flat()));
 }
 
 export function possibleNextWords(word: string, letters: string[]) {
-    const possibleWords: Set<string> = new Set();
+    const possibleWordsSet: Set<string> = new Set();
 
     // For every letter in the alphabet, add it to the front of my word
-    letters.forEach((l) => possibleWords.add(`${l}${word}`));
+    letters.forEach((l) => possibleWordsSet.add(`${l}${word}`));
 
     // For every letter in my word, insert a letter after it, trying all letters in the alphabet
     word.split('').forEach((_wordLetter, index, splitWord) => {
         const front = splitWord.slice(0, index + 1);
         const back = splitWord.slice(index + 1);
         letters.forEach((l) => {
-           possibleWords.add(`${front.join('')}${l}${back.join('')}`)
+           possibleWordsSet.add(`${front.join('')}${l}${back.join('')}`)
         });
     })
 
-    return Array.from(possibleWords);
+    return {currentWord: word, possibleWords: Array.from(possibleWordsSet)};
 }
 
-export function filterToValidWords(possibleWords: string[], allWords: Record<string, number>) {
-    return possibleWords.filter((w) => allWords[w])
+export function filterToValidWords(filterable: {currentWord: string, possibleWords: string[]}, allWords: Record<string, number>) {
+    const validWords = filterable.possibleWords.filter((w) => allWords[w]);
+
+    validWords.forEach((vw) => {
+        graph.setNode(vw);
+        graph.setEdge(filterable.currentWord, vw);
+    })
+
+    return validWords;
+}
+
+function printSampleAncestors(word: string) {
+    console.log(`😲 A way to build ${word}:`);
+    let ancestor = word;
+    while (ancestor) {
+        const predecessors = graph.predecessors(ancestor);
+        console.log(predecessors);
+        ancestor = predecessors[0];
+    }
 }
 
 if (require.main === module) {

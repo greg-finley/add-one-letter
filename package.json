@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/greg-finley/add-one-letter#readme",
   "dependencies": {
+    "@dagrejs/graphlib": "2.1.4",
     "axios": "0.21.1",
     "ts-node": "10.0.0",
     "typescript": "4.3.2"
