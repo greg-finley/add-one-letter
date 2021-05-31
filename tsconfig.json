@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [ "es2015" ],
+    "lib": [ "es2019" ],
     "target": "es5",
     "module": "commonjs",
     "strict": true,

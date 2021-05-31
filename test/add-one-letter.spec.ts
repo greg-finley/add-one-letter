@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { letters, possibleNextWords } from '../src/add-one-letter'
+import { filterToValidWords, letters, possibleNextWords } from '../src/add-one-letter'
 
 describe('add-one-letter', () => {
     describe('possibleNextWords', () => {
@@ -21,6 +21,12 @@ describe('add-one-letter', () => {
                 'barp', 'barq', 'bars', 'bart', 'baru', 'barv', 'barw',
                 'barx', 'bary', 'barz'
             ]);
+        })
+    })
+
+    describe('filterToValidWords', () => {
+        it('filters to valid words', () => {
+            expect(filterToValidWords(['bbb', 'yam', 'turkey'], {'yam': 1, 'turkey': 1, 'gravy': 1})).to.eql(['yam', 'turkey']);
         })
     })
 })
