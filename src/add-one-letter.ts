@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const buildableWordSets: Set<string>[] = [];
+
 export const letters = [
     'a', 'b', 'c', 'd', 'e', 'f',
     'g', 'h', 'i', 'j', 'k', 'l',
@@ -11,25 +13,22 @@ export const letters = [
 async function main() {
     const allWords = await getAllEnglishWords();
 
-    const buildableWordSets: Set<string>[] = [];
+    var nextWords = new Set(letters);
 
-    const oneLetterWords = new Set(letters);
-    buildableWordSets.push(oneLetterWords);
+    while (nextWords.size) {
+        buildableWordSets.push(nextWords);
+        nextWords = getNextWordSet(nextWords, allWords);
+    }
 
-    const twoLetterWords = new Set(filterToValidWords(Array.from(oneLetterWords).map((w) => possibleNextWords(w, letters)).flat(), allWords));
-    buildableWordSets.push(twoLetterWords);
-
-    const threeLetterWords = new Set(filterToValidWords(Array.from(twoLetterWords).map((w) => possibleNextWords(w, letters)).flat(), allWords));
-    buildableWordSets.push(threeLetterWords);
-
-    const fourLetterWords = new Set(filterToValidWords(Array.from(threeLetterWords).map((w) => possibleNextWords(w, letters)).flat(), allWords));
-    buildableWordSets.push(fourLetterWords);
-
-    console.log(fourLetterWords.size);
+    console.log(buildableWordSets[buildableWordSets.length - 1]);
 }
 
 async function getAllEnglishWords() {
     return (await axios.get<Record<string, number>>('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json')).data;
+}
+
+function getNextWordSet(currentSet: Set<string>, allWords: Record<string, number>) {
+    return new Set(filterToValidWords(Array.from(currentSet).map((w) => possibleNextWords(w, letters)).flat(), allWords));
 }
 
 export function possibleNextWords(word: string, letters: string[]) {
