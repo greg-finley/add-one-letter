@@ -4,7 +4,7 @@ import { filterToValidWords, letters, possibleNextWords } from '../src/add-one-l
 describe('add-one-letter', () => {
     describe('possibleNextWords', () => {
         it('finds possible next words', () => {
-            expect(possibleNextWords('bar', letters)).to.eql([
+            expect(possibleNextWords('bar', letters).possibleWords).to.eql([
                 'abar', 'bbar', 'cbar', 'dbar', 'ebar', 'fbar', 'gbar',
                 'hbar', 'ibar', 'jbar', 'kbar', 'lbar', 'mbar', 'nbar',
                 'obar', 'pbar', 'qbar', 'rbar', 'sbar', 'tbar', 'ubar',
