@@ -1,9 +1,10 @@
 import axios from "axios";
 
 async function main() {
-    const allWords = await axios.get('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json');
+    const allWords = (await axios.get<Record<string, number>>('https://raw.githubusercontent.com/dwyl/english-words/master/words_dictionary.json')).data;
 
-    console.log(Object.keys(allWords.data).length);
+    console.log(allWords.a);
+    console.log(allWords.sgnaingiasning);
 }
 
 main();
