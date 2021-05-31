@@ -2,7 +2,7 @@
 
 Start with one-letter words: either "a" or "I". Add one letter anywhere in the word to create a valid Scrabble word, then repeat. What's the longest such word we can construct this way?
 
-The answer is a single 11-letter word: `complecting`.
+The answer is a single 11-letter word: `complecting`. [Lots of other people have discovered this as well](https://www.google.com/search?q=complecting+longest+word).
 
 The list of English words is from [here](https://github.com/benjamincrom/scrabble).
 
