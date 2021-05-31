@@ -1,0 +1,22 @@
+{
+  "name": "add-one-letter",
+  "version": "1.0.0",
+  "description": "Explore longest words that can be created from other valid words, adding one letter at a time",
+  "scripts": {
+    "add-one-letter": "ts-node src/add-one-letter.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greg-finley/add-one-letter.git"
+  },
+  "author": "greg-finley",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/greg-finley/add-one-letter/issues"
+  },
+  "homepage": "https://github.com/greg-finley/add-one-letter#readme",
+  "dependencies": {
+    "ts-node": "10.0.0",
+    "typescript": "4.3.2"
+  }
+}
